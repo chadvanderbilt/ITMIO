@@ -1,5 +1,4 @@
 setwd("/Users/vanderbc/Downloads/code/")
-source("generate_alphadiv_function.R")
 source("prepare_data.R")
 
 paired <- read.delim(paired_samples_file, sep = ",", header = T) %>% #dataframe with all the paired samples
