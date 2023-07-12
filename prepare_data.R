@@ -172,43 +172,6 @@ pdl1cohort_v6 <- pdl1cohort %>%
   filter(impact_version=="IM6") %>% 
   left_join(pdl1cohort_dop)
 
-#Antibiotics
-test_atb_inpt <- rbind((read_excel(abx_inpt_file, sheet = "Abx IP ", skip = 5) %>% janitor::clean_names() %>% rename(mrn=mrn_1) %>% select(mrn, drug_name, route, abx_cat, admin_date)),
-                       (read_excel(abx_inpt_file, sheet = "Abx OP ", skip = 5) %>% janitor::clean_names() %>% rename(mrn=mrn_1) %>% select(mrn, drug_name, route, abx_cat, admin_date)),
-                       (read_excel(abx_inpt_file, sheet = "CIS Retail ", skip = 5)%>% janitor::clean_names() %>% rename(mrn=mrn_1) %>% select(mrn, drug_name, route, abx_cat, enter_date) %>% rename(admin_date = enter_date)),
-                       (read_excel(abx_inpt_file, sheet = "Abx eRx ", skip = 5) %>% janitor::clean_names() %>% rename(mrn=mrn_2) %>% select(mrn, drug_name, route, abx_cat, rx_create_date) %>% rename(admin_date = rx_create_date)),
-                       (read_excel(abx_inpt_file, sheet = "Abx OR ", skip = 5) %>% janitor::clean_names() %>% rename(mrn=mrn_3) %>% select(mrn, drug_name, route, abx_cat, surg_dte) %>% rename(admin_date = surg_dte))) %>% 
-  filter(abx_cat!="antifungals") %>% 
-  filter(abx_cat!="antiviral agents") %>% 
-  filter(abx_cat!="antimalarial agents") %>% 
-  mutate(abx_cat=ifelse(str_detect(abx_cat,"macrolide derivatives"), "macrolide", abx_cat)) %>% 
-  mutate(abx_cat=ifelse(str_detect(abx_cat, "miscellaneous antibiotics"), "miscellaneous", abx_cat)) %>% 
-  mutate(abx_cat=ifelse(str_detect(abx_cat, "glycopeptide antibiotic"), "glycopeptide", abx_cat)) %>% 
-  mutate(mrn=str_pad(mrn, width = 8, side="left", pad = "0")) %>% 
-  filter(mrn %in% pdl1cohort_v6$mrn) %>% 
-  full_join(pdl1cohort_v6, by="mrn") %>% 
-  select(mrn, DMP_ASSAY_ID, drug_name, route, abx_cat, start_date, admin_date, DOP) %>% 
-  mutate(delta_atb_io=difftime(start_date, admin_date, units="days")) %>% 
-  mutate(delta_atb_DOP=difftime(as.Date(DOP, "%m/%d/%y"), admin_date, units="days")) %>% 
-  mutate(atb_inpt_io=ifelse(delta_atb_io<30 & delta_atb_io>0, "ATBinptIO", "No ATB")) %>% #ATB prior to IO
-  mutate(atb_inpt_DOP=ifelse(delta_atb_io<30 & delta_atb_io>0, "ATBProcedure", "No ATB")) %>% #ATB prior to procedure
-  rename(drug_name_inpt=drug_name) %>% 
-  rename(route_inpt=route) %>% 
-  rename(abx_cat_inpt=abx_cat) %>% 
-  rename(admin_date_inpt=admin_date) %>% 
-  distinct(mrn,abx_cat_inpt,.keep_all=TRUE) %>% 
-  group_by(mrn) %>% 
-  arrange(abx_cat_inpt) %>% 
-  mutate(drug_name_inpt = paste0(drug_name_inpt, collapse = " | "),
-         abx_cat_inpt_raw = paste0(abx_cat_inpt, collapse = " | "),
-         atb_inpt_io = paste0(atb_inpt_io, collapse = " | "),
-         atb_inpt_DOP = paste0(atb_inpt_DOP, collapse = " | ")) %>%   
-  mutate(abx_cat_inpt=ifelse(str_detect(abx_cat_inpt_raw, "\\b | \\b"), "combination regimen", abx_cat_inpt_raw)) %>% 
-  ungroup() %>% 
-  distinct(mrn, .keep_all = T) %>% 
-  mutate(atb_inpt_io = ifelse(str_detect(atb_inpt_io, "ATBinptIO") == TRUE, "Antibiotics", "No Antibiotics")) %>% 
-  mutate(atb_inpt_DOP = ifelse(str_detect(atb_inpt_DOP, "ATBProcedure") == TRUE, "Antibiotics", "No Antibiotics")) %>% 
-  select(DMP_ASSAY_ID,atb_inpt_DOP)
 
 #Biopsy details
 Copy_of_biopsy_details <- read_excel(biopsy_details_file) %>% 
@@ -230,14 +193,14 @@ final <- read.delim(matched_samples_file, sep = ",", header = T)
 cases_from_gs <- read.delim(random_index_file, sep = ",", header = T)
 
 
-#Generate alpha diversity for each case by sex, only need to do this once
-Generate_alphadiv(DB=DB_IMPACT_Lung_DECONTAM_Genus, ClassifcationTask = (pdl1cohort_v6 %>% dplyr::rename(Classification=sex) %>%
-                                                            mutate(Classification=ifelse(Classification=="M", 1, 
-                                                                                         ifelse(Classification=="F", 2, NA))) %>% 
-                                                            select(DMP_ASSAY_ID, Classification)), figfile = fig_file, title_fig = "Alpha Diversity DECONTAM")
+# #Generate alpha diversity for each case by sex, only need to do this once, deprecated.  See beta "beta_diversity.R".
+# Generate_alphadiv(DB=DB_IMPACT_Lung_DECONTAM_Genus, ClassifcationTask = (pdl1cohort_v6 %>% dplyr::rename(Classification=sex) %>%
+#                                                             mutate(Classification=ifelse(Classification=="M", 1, 
+#                                                                                          ifelse(Classification=="F", 2, NA))) %>% 
+#                                                             select(DMP_ASSAY_ID, Classification)), figfile = fig_file, title_fig = "Alpha Diversity DECONTAM")
 
-#Alpha diversity file
-alpha_div <- read.delim(paste0(fig_file, "__alpha_diversity.csv"), sep = ",", header = TRUE) 
+# #Alpha diversity file
+# alpha_div <- read.delim(paste0(fig_file, "__alpha_diversity.csv"), sep = ",", header = TRUE) 
 
 #Treatment subgroups
 #IO alone
