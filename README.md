@@ -26,6 +26,7 @@ The input file types used are documented in prepare_data.R,  filenames are in qu
 7) List of samples in which the same tumor is sequenced as both primary and metastatis "paired_samples_file", indexed to patient (MRN) with sample identifier (DMP_ASSAY_ID)
 8) No template control (NTC) DB file "ntx_complete_DB_file" is the analogous file to "all_microbiome_file" that contain microbial reads from the no template control from all run of NGS sequencing. This file is used to understand the underlying contamination of reagents as the well contains no template DNA from samples or other sources.  NTC is use to set thresholds for levels of contamination. 
 
+A file called "finaljoin.txt" is required to convert "all_microbiome_file" to genus and species specific files need.  The "finaljoin.txt" is a derivative of the taxonomy databased downloaded from https://www.ncbi.nlm.nih.gov/taxonomy.  The file is too large to host on github. Please email vanderbc@mskcc.org for access to "finaljoin.txt" file. 
 
 Libraries required can be installed by executiing install.R.  The packages used require R version >= 4.0. 
 
