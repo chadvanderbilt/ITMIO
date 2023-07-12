@@ -21,7 +21,7 @@ library(viridis)
 
 #Set working Directory of Data files
 setwd("/Users/vanderbc/Downloads/code/")
-source("generate_alphadiv_function.R")
+# source("generate_alphadiv_function.R")
 #output directory for files generated
 write_out_figure_directory <- "figures/"
 fig_file <- "figures/AlphaDiversity_DECONTAM"
