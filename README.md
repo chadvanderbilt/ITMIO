@@ -13,7 +13,7 @@ The input file types used are documented in prepare_data.R, filenames are in quo
 
 4. Date of procedure "pdl1cohort_dop_file" contains date that tissue is obtained indexed to "DMP_ASSAY_ID"
 
-5. No template control (NTC) DB file "ntx_complete_DB_file" is the analogous file to "all_microbiome_file" that contain microbial reads from the no template control from all run of NGS sequencing. This file is used to understand the underlying contamination of reagents as the well contains no template DNA from samples or other sources. NTC is use to set thresholds for levels of contamination.
+5. No template control (NTC) DB file "ntx_complete_DB_file" is the analogous file to "all_microbiome_file" that contain microbial reads from the no template control from all runs of NGS sequencing. This file is used to understand the underlying contamination of reagents as the well contains no template DNA from samples or other sources. NTC is use to set thresholds for levels of contamination.
 
 A file called "finaljoin.txt" is required to convert "all_microbiome_file" to genus and species specific files need. The "finaljoin.txt" is a derivative of the taxonomy databased downloaded from https://www.ncbi.nlm.nih.gov/taxonomy. The file is too large to host on github. Please email vanderbc@mskcc.org for access to "finaljoin.txt" file.
 
@@ -21,7 +21,7 @@ Libraries required can be installed by executiing install.R. The packages used r
 
 All data and libraries are loaded through prepare_data.R so to use own data, the path to files must be manually mapped in prepare_data.R file. Prepare data is ran for all subsequent scripts and executed from source after being updated.
 
-Executable in the package are use for statistics and generating all figures in manuscript, listed alphabetically:
+Executable in the package are used for statistics and generating all figures in manuscript, listed alphabetically:
 
 1. "descriptive.R" generates descriptive statistics of cohorts as tables.
 
