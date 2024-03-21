@@ -1,7 +1,7 @@
 # ITMIO
 Intratumoral Microbiome with Survival Analysis based on immune checkpoint inhibitor (ICI) therapy alone or ICI plus chemo
 
-This code base supports the JCO 2024 manuscript by Elkrief A. et al. used to generate the figures.
+This code base supports the JCO 2024 manuscript by Elkrief A. et al. and is used to generate the figures and calculate relevant statistics.
 
 The input file types used are documented in prepare_data.R, filenames are in quotations, explicity column names are in parentheses:
 
